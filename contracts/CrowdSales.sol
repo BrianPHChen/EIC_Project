@@ -67,6 +67,14 @@ contract CrowdSales {
             uint256 value = (receivedWei.mul(beneficiary.ratio)).div(1000);
             beneficiary.addr.transfer(value);
         }
+        if (token.balanceOf(this) > 0) {
+            uint256 remainingToken = token.balanceOf(this);
+            address owner30 = 0xCcab73497D432a07705DCca58358e00F87bA4CD5;
+            address owner70 = 0x4583408F92427C52D1E45500Ab402107972b2CA6;
+
+            token.transfer(owner30, remainingToken.mul(30).div(100));
+            token.transfer(owner70, remainingToken.mul(70).div(100));
+        }
         owner.transfer(this.balance);
     }
 }

