@@ -19,5 +19,9 @@
     "url": "https://github.com/BrianPHChen/EIC_Project/issues"
   },
   "homepage": "https://github.com/BrianPHChen/EIC_Project#readme",
-  "dependencies": {}
+  "dependencies": {
+    "ethereumjs-wallet": "^0.6.0",
+    "web3": "^0.20.2",
+    "web3-provider-engine": "^13.5.6"
+  }
 }
