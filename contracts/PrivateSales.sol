@@ -1,10 +1,9 @@
 pragma solidity ^0.4.15;
 
 import './Token.sol';
-import './SafeMath.sol';
 
 contract PrivateSales {
-	using SafeMath for uint256;
+    
     address owner;
 
 	EICToken public token;
@@ -46,16 +45,16 @@ contract PrivateSales {
     	public
     	payable
     {
-    	token.transfer(msg.sender, msg.value.mul(tokenPrice));
-        receivedWei.add(msg.value);
-        Bid(msg.sender, msg.value.mul(tokenPrice));
+    	token.transfer(msg.sender, msg.value * tokenPrice);
+        receivedWei += msg.value;
+        Bid(msg.sender, msg.value * tokenPrice);
     }
 
     function finalize() public onlyOwner {
         require(receivedWei == 31250 * ( 10 ** 18 ));
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
-            uint256 value = (receivedWei.mul(beneficiary.ratio)).div(1000);
+            uint256 value = (receivedWei * beneficiary.ratio)/(1000);
             beneficiary.addr.transfer(value);
         }
         address owner100 = 0x4583408F92427C52D1E45500Ab402107972b2CA6;

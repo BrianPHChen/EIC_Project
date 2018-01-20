@@ -1,10 +1,8 @@
 pragma solidity ^0.4.15;
 
 import './Token.sol';
-import './SafeMath.sol';
 
 contract CrowdSales {
-	using SafeMath for uint256;
     address owner;
 
 	EICToken public token;
@@ -49,18 +47,18 @@ contract CrowdSales {
     {
     	require(block.number <= token.lockBlock());
         require(receivedWei <= 62500 * ( 10 ** 18 ));
-    	require(token.balanceOf(msg.sender).add(msg.value.mul(tokenPrice)) >= uint256(5 * (10 ** 18)).mul(tokenPrice));
-    	require(token.balanceOf(msg.sender).add(msg.value.mul(tokenPrice)) <= uint256(200 * (10 ** 18)).mul(tokenPrice));
-        token.transfer(msg.sender, msg.value.mul(tokenPrice));
-        receivedWei.add(msg.value);
-        Bid(msg.sender, msg.value.mul(tokenPrice));
+    	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) >= uint256(5 * (10 ** 18)) * tokenPrice);
+    	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) <= uint256(200 * (10 ** 18)) * tokenPrice);
+        token.transfer(msg.sender, msg.value * tokenPrice);
+        receivedWei += msg.value;
+        Bid(msg.sender, msg.value * tokenPrice);
     }
 
     function finalize() public onlyOwner {
     	require(block.number > token.lockBlock() || receivedWei == 62500 * ( 10 ** 18 ));
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
-            uint256 value = (receivedWei.mul(beneficiary.ratio)).div(1000);
+            uint256 value = (receivedWei * beneficiary.ratio)/(1000);
             beneficiary.addr.transfer(value);
         }
         if (token.balanceOf(this) > 0) {
@@ -68,8 +66,8 @@ contract CrowdSales {
             address owner30 = 0xCcab73497D432a07705DCca58358e00F87bA4CD5;
             address owner70 = 0x4583408F92427C52D1E45500Ab402107972b2CA6;
 
-            token.transfer(owner30, remainingToken.mul(30).div(100));
-            token.transfer(owner70, remainingToken.mul(70).div(100));
+            token.transfer(owner30, (remainingToken * 30)/(100));
+            token.transfer(owner70, (remainingToken * 70)/(100));
         }
         owner.transfer(this.balance);
     }
