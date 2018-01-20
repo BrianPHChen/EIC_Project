@@ -100,11 +100,14 @@ contract EICToken is StandardToken {
     {
         owner = msg.sender;
         totalSupply = 3125000000 * multiplier;
-        balances[owner] = totalSupply;
         lockBlock = block.number + _lockBlockPeriod;
     }
 
-    function distribute() public onlyOwner {
+    function distribute(address[] addr, uint[] token) public onlyOwner {
         // only owner can call
+        require(addr.length == token.length);
+        for (uint i = 0; i < addr.length; i++) {
+            balances[addr[i]] = token * multiplier;
+        }
     }
 }
