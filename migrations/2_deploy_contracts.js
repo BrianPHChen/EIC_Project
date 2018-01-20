@@ -7,5 +7,5 @@ var lockBlockPeriod = 0;
 module.exports = function(deployer) {
 	deployer.deploy(EICToken, lockBlockPeriod);
  	deployer.deploy(CrowdSales);
-  	deployer.deploy(PrivateSales);
+    deployer.deploy(PrivateSales);
 };

@@ -1,6 +1,6 @@
 pragma solidity ^0.4.15;
 
-import './Token.sol';
+import './EICToken.sol';
 
 contract PrivateSales {
     
