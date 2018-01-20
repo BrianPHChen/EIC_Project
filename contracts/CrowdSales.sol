@@ -4,12 +4,12 @@ import './Token.sol';
 import './SafeMath.sol';
 
 contract CrowdSales {
-		using SafeMath for uint256;
+	using SafeMath for uint256;
 
-		EICToken public token;
+	EICToken public token;
 
     uint public startBlock;
-		uint public endBlock;
+	uint public endBlock;
     uint public receivedWei;
     uint public tokenPrice;
 
@@ -34,9 +34,9 @@ contract CrowdSales {
     	require(block.number <= endBlock);
     	require(token.balanceOf(msg.sender).add(msg.value.mul(tokenPrice)) >= uint256(5 * 10 ** uint(18)).mul(tokenPrice));
     	require(token.balanceOf(msg.sender).add(msg.value.mul(tokenPrice)) <= uint256(200 * 10 ** uint(18)).mul(tokenPrice));
-			token.transfer(msg.sender, msg.value.mul(tokenPrice));
-			receivedWei.add(msg.value);
-			Bid(msg.sender, msg.value.mul(tokenPrice));
+        token.transfer(msg.sender, msg.value.mul(tokenPrice));
+        receivedWei.add(msg.value);
+        Bid(msg.sender, msg.value.mul(tokenPrice));
     }
 
     function finalize() {
