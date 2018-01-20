@@ -6,27 +6,31 @@ contract Token {
     using SafeMath for uint256;
 
     uint256 public totalSupply;
-    
+
     //Functions
     function balanceOf(address _owner) public constant returns (uint256 balance);
     function allowance(address _owner, address _spender) public constant returns (uint256 remaining);
     function transfer(address _to, uint256 _value) public returns (bool success);
     function approve(address _spender, uint256 _value) public returns (bool success);
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
-    
+
     //Events
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 }
 
 contract StandardToken is Token {
-
     uint public lockBlock;
     address owner;
 
     //Data structures
     mapping (address => uint256) balances;
     mapping (address => mapping (address => uint256)) allowed;
+
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
 
     //Public functions
     function transfer(address _to, uint256 _value) public returns (bool) {
@@ -100,8 +104,7 @@ contract EICToken is StandardToken {
         lockBlock = block.number + _lockBlockPeriod;
     }
 
-    function distributed() {
-        require(msg.sender == owner);
+    function distribute() public onlyOwner {
         // only owner can call
     }
 }
