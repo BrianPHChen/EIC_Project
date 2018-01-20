@@ -26,7 +26,7 @@ contract PrivateSales {
         _;
     }
 
-    function PrivateSales() public {
+    function PrivateSales(address _tokenAddress) public {
         owner = msg.sender;
         beneficiaries.push(Beneficiary(0xA5A6b44312a2fc363D78A5af22a561E9BD3151be, 10));
         beneficiaries.push(Beneficiary(0x8Ec21f2f285545BEc0208876FAd153e0DEE581Ba, 10));
@@ -34,11 +34,8 @@ contract PrivateSales {
         beneficiaries.push(Beneficiary(0x882Efb2c4F3B572e3A8B33eb668eeEdF1e88e7f0, 10));
         beneficiaries.push(Beneficiary(0xe63286CCaB12E10B9AB01bd191F83d2262bde078, 15));
         beneficiaries.push(Beneficiary(0x4583408F92427C52D1E45500Ab402107972b2CA6, 950));
-    }
-
-    function setUP(address _tokenAddress) public onlyOwner {
-    	token = EICToken(_tokenAddress);
-    	tokenPrice = 15000;
+        token = EICToken(_tokenAddress);
+        tokenPrice = 15000;    
     }
 
     function () public payable {

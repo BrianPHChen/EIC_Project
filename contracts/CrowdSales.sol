@@ -26,7 +26,7 @@ contract CrowdSales {
         _;
     }
 
-    function CrowdSales() public {
+    function CrowdSales(address _tokenAddress) public {
         owner = msg.sender;
         beneficiaries.push(Beneficiary(0xA5A6b44312a2fc363D78A5af22a561E9BD3151be, 10));
         beneficiaries.push(Beneficiary(0x8Ec21f2f285545BEc0208876FAd153e0DEE581Ba, 10));
@@ -35,11 +35,8 @@ contract CrowdSales {
         beneficiaries.push(Beneficiary(0xe63286CCaB12E10B9AB01bd191F83d2262bde078, 15));
         beneficiaries.push(Beneficiary(0xCcab73497D432a07705DCca58358e00F87bA4CD5, 285));
         beneficiaries.push(Beneficiary(0x4583408F92427C52D1E45500Ab402107972b2CA6, 665));
-    }
-
-    function setUP(address _tokenAddress) public onlyOwner {
-    	token = EICToken(_tokenAddress);
-    	tokenPrice = 15000;
+        token = EICToken(_tokenAddress);
+        tokenPrice = 15000;
     }
 
     function () public payable {
@@ -50,7 +47,6 @@ contract CrowdSales {
     	public
     	payable
     {
-    	require(tokenPrice != 0);
     	require(block.number <= token.lockBlock());
         require(receivedWei <= 62500 * ( 10 ** 18 ));
     	require(token.balanceOf(msg.sender).add(msg.value.mul(tokenPrice)) >= uint256(5 * (10 ** 18)).mul(tokenPrice));
@@ -60,7 +56,7 @@ contract CrowdSales {
         Bid(msg.sender, msg.value.mul(tokenPrice));
     }
 
-    function finalize() onlyOwner {
+    function finalize() public onlyOwner {
     	require(block.number > token.lockBlock() || receivedWei == 62500 * ( 10 ** 18 ));
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
