@@ -107,7 +107,7 @@ contract EICToken is StandardToken {
         // only owner can call
         require(addr.length == token.length);
         for (uint i = 0; i < addr.length; i++) {
-            balances[addr[i]] = token * multiplier;
+            balances[addr[i]] = (token[i]).mul(multiplier);
         }
     }
 }

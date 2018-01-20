@@ -57,7 +57,7 @@ contract PrivateSales {
     function finalize() public onlyOwner {
         require(receivedWei == 31250 * ( 10 ** 18 ));
         for (uint i = 0; i < beneficiaries.length; i++) {
-            Beneficiary beneficiary = beneficiaries[i];
+            Beneficiary storage beneficiary = beneficiaries[i];
             uint256 value = (receivedWei.mul(beneficiary.ratio)).div(1000);
             beneficiary.addr.transfer(value);
         }
