@@ -22,6 +22,7 @@ contract Token {
 contract StandardToken is Token {
 
     uint public lockBlock;
+    address owner;
 
     //Data structures
     mapping (address => uint256) balances;
@@ -83,8 +84,6 @@ contract StandardToken is Token {
 }
 
 contract EICToken is StandardToken {
-
-    address owner;
     //Token metadata
     string constant public name = "Entertainment Industry Coin";
     string constant public symbol = "EIC";
@@ -94,7 +93,7 @@ contract EICToken is StandardToken {
     function EICToken(
         uint _lockBlockPeriod)
         public
-    {   
+    {
         owner = msg.sender;
         totalSupply = 3125000000 * multiplier;
         balances[owner] = totalSupply;
