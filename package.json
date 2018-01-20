@@ -18,5 +18,6 @@
   "bugs": {
     "url": "https://github.com/BrianPHChen/EIC_Project/issues"
   },
-  "homepage": "https://github.com/BrianPHChen/EIC_Project#readme"
+  "homepage": "https://github.com/BrianPHChen/EIC_Project#readme",
+  "dependencies": {}
 }
