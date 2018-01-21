@@ -7,8 +7,8 @@ contract CrowdSales {
 
 	EICToken public token;
 
-    uint256 public receivedWei;
-    uint256 public tokenPrice;
+    uint public receivedWei;
+    uint public tokenPrice;
 
     struct Beneficiary {
         address addr;
