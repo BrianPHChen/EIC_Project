@@ -7,8 +7,8 @@ contract CrowdSales {
 
 	EICToken public token;
 
-    uint public receivedWei;
-    uint public tokenPrice;
+    uint256 public receivedWei;
+    uint256 public tokenPrice;
 
     struct Beneficiary {
         address addr;
@@ -47,8 +47,8 @@ contract CrowdSales {
     {
     	require(block.number <= token.lockBlock());
         require(receivedWei <= 62500 * ( 10 ** 18 ));
-    	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) >= uint256(5 * (10 ** 18)) * tokenPrice);
-    	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) <= uint256(200 * (10 ** 18)) * tokenPrice);
+    	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) >= (5 * (10 ** 18)) * tokenPrice);
+    	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) <= (200 * (10 ** 18)) * tokenPrice);
         token.transfer(msg.sender, msg.value * tokenPrice);
         receivedWei += msg.value;
         Bid(msg.sender, msg.value * tokenPrice);

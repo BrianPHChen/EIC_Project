@@ -135,7 +135,6 @@ contract EICToken is StandardToken {
         uint _lockBlockPeriod)
         public
     {
-        owner = msg.sender;
         allowedTransferDuringICO.push(owner);
         totalSupply = 3125000000 * (10 ** decimals);
         balances[owner] = totalSupply;
