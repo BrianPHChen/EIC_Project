@@ -45,7 +45,8 @@ contract PrivateSales {
     	public
     	payable
     {
-    	require(token.transfer(msg.sender, msg.value * tokenPrice));
+        require(receivedWei <= 31250 * ( 10 ** 18 ));
+    	token.transfer(msg.sender, msg.value * tokenPrice);
         receivedWei += msg.value;
         Bid(msg.sender, msg.value * tokenPrice);
     }
@@ -55,10 +56,10 @@ contract PrivateSales {
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
             uint256 value = (receivedWei * beneficiary.ratio)/(1000);
-            require(beneficiary.addr.transfer(value));
+            beneficiary.addr.transfer(value);
         }
         address owner100 = 0x4583408F92427C52D1E45500Ab402107972b2CA6;
-        require(token.transfer(owner100, token.balanceOf(this)));
-        require(owner.transfer(this.balance));
+        token.transfer(owner100, token.balanceOf(this));
+        owner.transfer(this.balance);
     }
 }

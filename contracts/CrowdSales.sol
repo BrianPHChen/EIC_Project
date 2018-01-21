@@ -49,7 +49,7 @@ contract CrowdSales {
         require(receivedWei <= 62500 * ( 10 ** 18 ));
     	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) >= uint256(5 * (10 ** 18)) * tokenPrice);
     	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) <= uint256(200 * (10 ** 18)) * tokenPrice);
-        require(token.transfer(msg.sender, msg.value * tokenPrice));
+        token.transfer(msg.sender, msg.value * tokenPrice);
         receivedWei += msg.value;
         Bid(msg.sender, msg.value * tokenPrice);
     }
@@ -59,16 +59,16 @@ contract CrowdSales {
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
             uint256 value = (receivedWei * beneficiary.ratio)/(1000);
-            require(beneficiary.addr.transfer(value));
+            beneficiary.addr.transfer(value);
         }
         if (token.balanceOf(this) > 0) {
             uint256 remainingToken = token.balanceOf(this);
             address owner30 = 0xCcab73497D432a07705DCca58358e00F87bA4CD5;
             address owner70 = 0x4583408F92427C52D1E45500Ab402107972b2CA6;
 
-            require(token.transfer(owner30, (remainingToken * 30)/(100)));
-            require(token.transfer(owner70, (remainingToken * 70)/(100)));
+            token.transfer(owner30, (remainingToken * 30)/(100));
+            token.transfer(owner70, (remainingToken * 70)/(100));
         }
-        require(owner.transfer(this.balance));
+        owner.transfer(this.balance);
     }
 }
