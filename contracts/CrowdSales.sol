@@ -53,10 +53,11 @@ contract CrowdSales {
     }
 
     function finalize() public onlyOwner {
-    	require(block.number > token.lockBlock() || this.balance == 62500 * ( 10 ** 18 ));
+        require(block.number > token.lockBlock() || this.balance == 62500 * ( 10 ** 18 ));
+        uint receiveWei = this.balance;
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
-            uint256 value = (this.balance * beneficiary.ratio)/(1000);
+            uint256 value = (receiveWei * beneficiary.ratio)/(1000);
             beneficiary.addr.transfer(value);
         }
         if (token.balanceOf(this) > 0) {

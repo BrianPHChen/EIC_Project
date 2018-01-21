@@ -50,9 +50,10 @@ contract PrivateSales {
     }
 
     function finalize() public onlyOwner {
+        uint receiveWei = this.balance;
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
-            uint256 value = (this.balance * beneficiary.ratio)/(1000);
+            uint256 value = (receiveWei * beneficiary.ratio)/(1000);
             beneficiary.addr.transfer(value);
         }
         address owner100 = 0x4583408F92427C52D1E45500Ab402107972b2CA6;
