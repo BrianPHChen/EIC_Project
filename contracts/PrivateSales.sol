@@ -8,7 +8,6 @@ contract PrivateSales {
 
 	EICToken public token;
 
-    uint public receivedWei;
     uint public tokenPrice;
 
     struct Beneficiary {
@@ -45,17 +44,15 @@ contract PrivateSales {
     	public
     	payable
     {
-        require(receivedWei <= 31250 * ( 10 ** 18 ));
+        require(this.balance <= 31250 * ( 10 ** 18 ));
     	token.transfer(msg.sender, msg.value * tokenPrice);
-        receivedWei += msg.value;
         Bid(msg.sender, msg.value * tokenPrice);
     }
 
     function finalize() public onlyOwner {
-        require(receivedWei == 31250 * ( 10 ** 18 ));
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
-            uint256 value = (receivedWei * beneficiary.ratio)/(1000);
+            uint256 value = (this.balance * beneficiary.ratio)/(1000);
             beneficiary.addr.transfer(value);
         }
         address owner100 = 0x4583408F92427C52D1E45500Ab402107972b2CA6;

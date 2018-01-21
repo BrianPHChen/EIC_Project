@@ -7,7 +7,6 @@ contract CrowdSales {
 
 	EICToken public token;
 
-    uint public receivedWei;
     uint public tokenPrice;
 
     struct Beneficiary {
@@ -46,19 +45,18 @@ contract CrowdSales {
     	payable
     {
     	require(block.number <= token.lockBlock());
-        require(receivedWei <= 62500 * ( 10 ** 18 ));
+        require(this.balance <= 62500 * ( 10 ** 18 ));
     	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) >= (5 * (10 ** 18)) * tokenPrice);
     	require(token.balanceOf(msg.sender) + (msg.value * tokenPrice) <= (200 * (10 ** 18)) * tokenPrice);
         token.transfer(msg.sender, msg.value * tokenPrice);
-        receivedWei += msg.value;
         Bid(msg.sender, msg.value * tokenPrice);
     }
 
     function finalize() public onlyOwner {
-    	require(block.number > token.lockBlock() || receivedWei == 62500 * ( 10 ** 18 ));
+    	require(block.number > token.lockBlock() || this.balance == 62500 * ( 10 ** 18 ));
         for (uint i = 0; i < beneficiaries.length; i++) {
             Beneficiary storage beneficiary = beneficiaries[i];
-            uint256 value = (receivedWei * beneficiary.ratio)/(1000);
+            uint256 value = (this.balance * beneficiary.ratio)/(1000);
             beneficiary.addr.transfer(value);
         }
         if (token.balanceOf(this) > 0) {
