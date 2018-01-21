@@ -31,6 +31,7 @@ contract SafeMath {
 
 contract owned {
     address public owner;
+    address[] public allowedTransferDuringICO;
 
     function owned() {
         owner = msg.sender;
@@ -43,6 +44,15 @@ contract owned {
 
     function transferOwnership(address newOwner) onlyOwner {
         owner = newOwner;
+    }
+
+    function isAllowedTransferDuringICO(address addr) public constant returns (bool){
+        for(uint i = 0; i < allowedTransferDuringICO.length; i++) {
+            if (allowedTransferDuringICO[i] == msg.sender) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
@@ -68,7 +78,7 @@ contract StandardToken is SafeMath, Token {
     uint public lockBlock;
     /* Send coins */
     function transfer(address _to, uint256 _value) returns (bool success) {
-        require(block.number >= lockBlock || msg.sender == owner);
+        require(block.number >= lockBlock || isAllowedTransferDuringICO(msg.sender));
         if (balances[msg.sender] >= _value && _value > 0) {
             balances[msg.sender] = safeSub(balances[msg.sender], _value);
             balances[_to] = safeAdd(balances[_to], _value);
@@ -81,7 +91,7 @@ contract StandardToken is SafeMath, Token {
 
     /* A contract attempts to get the coins */
     function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
-        require(block.number >= lockBlock || msg.sender == owner);
+        require(block.number >= lockBlock || isAllowedTransferDuringICO(msg.sender));
         if (balances[_from] >= _value && allowed[_from][msg.sender] >= _value && _value > 0) {
             balances[_to] = safeAdd(balances[_to], _value);
             balances[_from] = safeSub(balances[_from], _value);
@@ -126,6 +136,7 @@ contract EICToken is StandardToken {
         public
     {
         owner = msg.sender;
+        allowedTransferDuringICO.push(owner);
         totalSupply = 3125000000 * (10 ** decimals);
         balances[owner] = totalSupply;
         lockBlock = block.number + _lockBlockPeriod;
@@ -134,8 +145,10 @@ contract EICToken is StandardToken {
     function distribute(address[] addr, uint256[] token) public onlyOwner {
         // only owner can call
         require(addr.length == token.length);
+        allowedTransferDuringICO.push(addr[0]);
+        allowedTransferDuringICO.push(addr[1]);
         for (uint i = 0; i < addr.length; i++) {
-            transfer(addr[i], token[i] * (10 ** decimals));
+            require(transfer(addr[i], token[i] * (10 ** decimals)));
         }
     }
 
